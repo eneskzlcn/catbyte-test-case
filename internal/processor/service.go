@@ -1,12 +1,17 @@
 package processor
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
+
+const Consumer = "processor"
 
 type RabbitMQClient interface {
-	Consume(onRecieved chan<- []byte)
+	Consume(onReceived chan []byte, consumer string)
 }
 type RedisClient interface {
-	SaveStruct(key string, value interface{}) error
+	SaveToArrayL(key string, value interface{}) error
 }
 type Service struct {
 	rabbitClient RabbitMQClient
@@ -18,17 +23,24 @@ func NewService(client RabbitMQClient, redisClient RedisClient) *Service {
 }
 
 func (s *Service) StartProcessing() {
-	onRecievedChan := make(chan<- []byte, 0)
-	s.rabbitClient.Consume(onRecievedChan)
+	onReceivedChan := make(chan []byte, 0)
+	go s.rabbitClient.Consume(onReceivedChan, Consumer)
 	var forever chan struct{}
 	go func() {
-		for d := range onRecievedChan {
+		for d := range onReceivedChan {
 			var message Message
 			err := json.Unmarshal(d, &message)
 			if err != nil {
 				continue
 			}
-			err = s.redisClient.SaveStruct(message.Sender, message)
+			err = s.redisClient.SaveToArrayL(message.Sender, MessageDTO{
+				Receiver: message.Receiver,
+				Message:  message.Message,
+			})
+			if err != nil {
+				fmt.Println("error occurred when save to array left ")
+				continue
+			}
 			if err != nil {
 				continue
 			}
