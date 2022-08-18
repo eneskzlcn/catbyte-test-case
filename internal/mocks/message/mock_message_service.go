@@ -35,7 +35,7 @@ func (m *MockMessageService) EXPECT() *MockMessageServiceMockRecorder {
 }
 
 // PushMessage mocks base method.
-func (m *MockMessageService) PushMessage(arg0 *message.MessageRequest) error {
+func (m *MockMessageService) PushMessage(arg0 *message.Message) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "PushMessage", arg0)
 	ret0, _ := ret[0].(error)

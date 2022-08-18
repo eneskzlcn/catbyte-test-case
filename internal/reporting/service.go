@@ -18,9 +18,13 @@ func (s *Service) Report(sender, receiver string) ([]Report, error) {
 		return nil, err
 	}
 	for _, item := range reportsStr {
-		report := ConstructReportFromStr(item)
-		if report.IsMessageSentBetween(sender, receiver) {
-			reports = append(reports, report)
+		reportDTO := ConstructReportDTOFromStr(item)
+		if reportDTO.IsMessageSentTo(receiver) {
+			reports = append(reports, Report{
+				Sender:   sender,
+				Receiver: reportDTO.Receiver,
+				Message:  reportDTO.Message,
+			})
 		}
 	}
 	return reports, nil

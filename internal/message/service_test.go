@@ -18,20 +18,14 @@ func TestService_PushMessage(t *testing.T) {
 	mockRabbitMQClient := mocks.NewMockRabbitMQClient(controller)
 	service := message.NewService(mockRabbitMQClient)
 
-	testMessage := message.MessageRequest{
+	testMessage := message.Message{
 		Sender:   "me",
 		Receiver: "you",
 		Message:  "hey",
 	}
-	rabbitMessage := message.RabbitMQMessage{
-		Sender:   testMessage.Sender,
-		Receiver: testMessage.Receiver,
-		Message:  testMessage.Message,
-	}
-
 	messageBytes, err := json.Marshal(testMessage)
 	assert.Nil(t, err)
 	mockRabbitMQClient.EXPECT().PushMessage(messageBytes).Return(nil)
-	err = service.PushMessage(&testMessage, rabbitMessage.Date)
+	err = service.PushMessage(&testMessage)
 	assert.Equal(t, err, nil)
 }

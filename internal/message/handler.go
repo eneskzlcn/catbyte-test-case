@@ -6,7 +6,7 @@ import (
 )
 
 type MessageService interface {
-	PushMessage(message *MessageRequest) error
+	PushMessage(message *Message) error
 }
 
 func NewHandler(service MessageService) *Handler {
@@ -18,13 +18,13 @@ type Handler struct {
 }
 
 func (h *Handler) GetMessage(ctx *gin.Context) {
-	var message MessageRequest
+	var message Message
 	if err := ctx.BindJSON(&message); err != nil {
 		ctx.Status(http.StatusBadRequest)
 		return
 	}
 	if err := h.service.PushMessage(&message); err != nil {
-		ctx.Status(http.StatusBadRequest)
+		ctx.Status(http.StatusInternalServerError)
 		return
 	}
 	ctx.Status(http.StatusOK)

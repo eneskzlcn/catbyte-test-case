@@ -27,5 +27,5 @@ func (h *Handler) Report(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, report)
 }
 func (h *Handler) RegisterRoutes(engine *gin.Engine) {
-	engine.GET("/message/list/:sender/:receiver", h.Report)
+	engine.GET("/message/list", h.Report)
 }

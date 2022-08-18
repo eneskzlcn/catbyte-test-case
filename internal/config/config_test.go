@@ -9,7 +9,7 @@ import (
 func TestLoadConfig(t *testing.T) {
 	config, err := config.LoadConfig("../../.dev/", "local", "yaml")
 	assert.Nil(t, err)
-	assert.Equal(t, config.Server.Port, "3000")
+	assert.Equal(t, config.Server.Port, "3234")
 	assert.Equal(t, config.Server.TrustedProxies[0], "*")
 	assert.Equal(t, config.Redis.Address, "localhost:6379")
 	assert.Equal(t, config.Redis.Password, "")

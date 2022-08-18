@@ -11,16 +11,22 @@ type Report struct {
 	Message  string `json:"message"`
 }
 
-func ConstructReportFromStr(str string) Report {
+type ReportDTO struct {
+	Receiver string `json:"receiver"`
+	Message  string `json:"message"`
+}
+
+func ConstructReportDTOFromStr(str string) ReportDTO {
 	bytes := []byte(str)
-	report := Report{}
+	report := ReportDTO{}
 	err := json.Unmarshal(bytes, &report)
 	if err != nil {
 		fmt.Println("error occurred when unmarshalling.")
-		return Report{}
+		return ReportDTO{}
 	}
 	return report
 }
-func (r Report) IsMessageSentBetween(sender, receiver string) bool {
-	return r.Sender == sender && r.Receiver == receiver
+
+func (r ReportDTO) IsMessageSentTo(receiver string) bool {
+	return r.Receiver == receiver
 }
