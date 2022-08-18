@@ -34,13 +34,13 @@ func (m *MockRabbitMQClient) EXPECT() *MockRabbitMQClientMockRecorder {
 }
 
 // Consume mocks base method.
-func (m *MockRabbitMQClient) Consume(arg0 <-chan []byte) {
+func (m *MockRabbitMQClient) Consume(arg0 chan []byte, arg1 string) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Consume", arg0)
+	m.ctrl.Call(m, "Consume", arg0, arg1)
 }
 
 // Consume indicates an expected call of Consume.
-func (mr *MockRabbitMQClientMockRecorder) Consume(arg0 interface{}) *gomock.Call {
+func (mr *MockRabbitMQClientMockRecorder) Consume(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Consume", reflect.TypeOf((*MockRabbitMQClient)(nil).Consume), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Consume", reflect.TypeOf((*MockRabbitMQClient)(nil).Consume), arg0, arg1)
 }
