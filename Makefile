@@ -4,3 +4,4 @@ generate-mocks:
 	mockgen -destination=internal/mocks/processor/mock_rabbitmq_client.go -package mocks github.com/eneskzlcn/catbyte-test-task/internal/processor RabbitMQClient
 	mockgen -destination=internal/mocks/processor/mock_redis_client.go -package mocks github.com/eneskzlcn/catbyte-test-task/internal/processor RedisClient
 	mockgen -destination=internal/mocks/reporting/mock_redis_client.go -package mocks github.com/eneskzlcn/catbyte-test-task/internal/reporting RedisClient
+	mockgen -destination=internal/mocks/reporting/mock_reporting_service.go -package mocks github.com/eneskzlcn/catbyte-test-task/internal/reporting ReportingService
