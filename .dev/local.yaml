@@ -1,0 +1,12 @@
+redis:
+  address: "localhost:6379"
+  password: ""
+
+rabbitMQ:
+  address: "amqp://user:password@localhost:6001/"
+  queue: "catbyte-messages"
+
+server:
+  port: "3000"
+  trustedProxies:
+    - "*"
