@@ -1,7 +1,7 @@
 package reporting
 
 type RedisClient interface {
-	Get(key string, out interface{}) error
+	GetArray(key string, out *[]string) error
 }
 type Service struct {
 	client RedisClient
@@ -10,8 +10,18 @@ type Service struct {
 func NewService(client RedisClient) *Service {
 	return &Service{client: client}
 }
-func (s *Service) Report(sender, reciever string) [][]Report {
-	//s.client.Get("")
-	// Not enough time to complete.
-	return nil
+func (s *Service) Report(sender, receiver string) ([]Report, error) {
+	reportsStr := make([]string, 0)
+	reports := make([]Report, len(reportsStr))
+	err := s.client.GetArray(sender, &reportsStr)
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range reportsStr {
+		report := ConstructReportFromStr(item)
+		if report.IsMessageSentBetween(sender, receiver) {
+			reports = append(reports, report)
+		}
+	}
+	return reports, nil
 }
