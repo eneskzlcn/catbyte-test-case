@@ -1,6 +1,9 @@
 package message
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 type RabbitMQClient interface {
 	PushMessage(message []byte) error
@@ -13,8 +16,9 @@ func NewService(client RabbitMQClient) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) PushMessage(message Message) error {
-	messageBytes, err := json.Marshal(message)
+func (s *Service) PushMessage(message *MessageRequest) error {
+	rabbitMessage := message.ToRabbitMQMessage(time.Now())
+	messageBytes, err := json.Marshal(rabbitMessage)
 	if err != nil {
 		return err
 	}

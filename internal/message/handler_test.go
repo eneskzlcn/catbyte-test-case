@@ -22,7 +22,7 @@ func TestHandler_GetMessage(t *testing.T) {
 
 		router.GET("/message", handler.GetMessage)
 		go router.Run("localhost:8080")
-		message := message.Message{
+		message := message.MessageRequest{
 			Sender:   "me",
 			Receiver: "you",
 			Message:  "hey",
