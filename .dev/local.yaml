@@ -7,6 +7,6 @@ rabbitMQ:
   queue: "catbyte-messages"
 
 server:
-  port: "3000"
+  port: "3234"
   trustedProxies:
     - "*"
