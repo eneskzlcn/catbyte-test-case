@@ -13,8 +13,8 @@ type Client struct {
 }
 
 func New(url string, queue string) *Client {
-
 	con, err := amqp.Dial(url)
+	//defer con.Close()
 	if err != nil {
 		log.Println("error occured when connecting to rabbitmq server")
 		return nil
@@ -25,7 +25,8 @@ func New(url string, queue string) *Client {
 	if err != nil {
 		return nil
 	}
-	return &Client{connection: con}
+
+	return &Client{connection: con, queue: queue}
 }
 func (c *Client) PushMessage(message []byte) error {
 	ch, err := c.connection.Channel()
@@ -39,17 +40,17 @@ func (c *Client) PushMessage(message []byte) error {
 		"", c.queue, false, false,
 		amqp.Publishing{
 			Headers:     nil,
-			ContentType: "application/json",
+			ContentType: "text/plain",
 			Body:        message,
 		})
 	if err != nil {
-		log.Println("Error occured when publishing the message ")
+		log.Println("error occurred when publishing the message ")
 		return err
 	}
 	return nil
 }
 
-func (c *Client) Consume(messageRecieved chan<- []byte) {
+func (c *Client) Consume(messageReceived chan []byte, consumer string) {
 	ch, err := c.connection.Channel()
 	defer ch.Close()
 	if err != nil {
@@ -57,7 +58,7 @@ func (c *Client) Consume(messageRecieved chan<- []byte) {
 	}
 	msgs, err := ch.Consume(
 		c.queue,
-		"",
+		consumer,
 		true,
 		false,
 		false,
@@ -68,7 +69,7 @@ func (c *Client) Consume(messageRecieved chan<- []byte) {
 	go func() {
 		for d := range msgs {
 			log.Printf("Received a message: %s", d.Body)
-			messageRecieved <- d.Body
+			messageReceived <- d.Body
 		}
 	}()
 	<-forever
