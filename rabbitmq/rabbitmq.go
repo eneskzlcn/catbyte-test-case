@@ -16,7 +16,7 @@ func New(url string, queue string) *Client {
 	con, err := amqp.Dial(url)
 	//defer con.Close()
 	if err != nil {
-		log.Println("error occured when connecting to rabbitmq server")
+		log.Println("error occurred when connecting to rabbitmq server")
 		return nil
 	}
 	ch, err := con.Channel()
@@ -25,7 +25,6 @@ func New(url string, queue string) *Client {
 	if err != nil {
 		return nil
 	}
-
 	return &Client{connection: con, queue: queue}
 }
 func (c *Client) PushMessage(message []byte) error {
