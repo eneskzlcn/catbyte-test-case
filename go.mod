@@ -1,4 +1,4 @@
-module github.com/eneskzlcn/catbyte-test-task
+module github.com/eneskzlcn/message-receiver-processor
 
 go 1.18
 
